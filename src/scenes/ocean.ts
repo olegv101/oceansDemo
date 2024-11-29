@@ -382,13 +382,22 @@ export class Ocean implements CreateSceneClass {
     }
 
     private _setValue(obj: any, name: string, value: any): void {
+        console.log('Ocean._setValue called:', { object: obj, name, value });
+        
         const parts: string[] = name.split("_");
-
+        let current = obj;
+        
         for (let i = 0; i < parts.length - 1; ++i) {
-            obj = obj[parts[i]];
+            current = current[parts[i]];
+            if (!current) {
+                console.error('Failed to traverse object path at:', parts[i]);
+                return;
+            }
         }
 
-        obj[parts[parts.length - 1]] = value;
+        const finalKey = parts[parts.length - 1];
+        console.log('Setting final value:', { key: finalKey, value });
+        current[finalKey] = value;
     }
 
     private _parameterRead(name: string): any {
@@ -449,7 +458,8 @@ export class Ocean implements CreateSceneClass {
     }
 
     private _parameterChanged(name: string, value: any): void {
-        //console.log(name, "=", value);
+        console.log('Ocean._parameterChanged called:', name, value);
+        
         switch (name) {
             case "size": {
                 const newSize = value | 0;
@@ -539,8 +549,10 @@ export class Ocean implements CreateSceneClass {
         }
 
         if (name.startsWith("waves_")) {
+            console.log('Processing waves parameter:', name, value);
             name = name.substring(6);
             this._setValue(this._wavesSettings, name, value === false ? false : value === true ? true : parseFloat(value));
+            console.log('Updated waves settings, initializing cascades');
             this._wavesGenerator!.initializeCascades();
         }
 

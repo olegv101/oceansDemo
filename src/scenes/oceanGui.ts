@@ -58,11 +58,16 @@ export class OceanGUI {
     }
 
     public updateParameter(name: string, value: any): void {
+        console.log('OceanGUI.updateParameter called:', name, value);
+        
         this._paramChanged(name, value);
         
         const control = this._gui.controllers.find((c: any) => c.property === name);
         if (control) {
+            console.log('Found GUI control for:', name);
             control.setValue(value);
+        } else {
+            console.warn('No GUI control found for:', name);
         }
     }
 

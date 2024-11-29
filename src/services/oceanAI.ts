@@ -87,7 +87,9 @@ export class OceanAI {
                     SET_PARAM[waves_swell_windSpeed]=80
                     SET_PARAM[waves_local_fetch]=500000
 
-                    Always explain the changes you're making and why they create the requested wave conditions.`
+                    Always explain the changes you're making and why they create the requested wave conditions.
+                    
+                    IMPORTANT: Make sure you are responding concisely IF AND ONLY IF it doesnt containt a command to change the parameters in any way`
                 }, {
                     role: "user",
                     content: message
@@ -101,6 +103,8 @@ export class OceanAI {
     }
 
     private _processAIResponse(response: string): string {
+        console.log('Processing AI response:', response);
+        
         const paramRegex = /SET_PARAM\[(.*?)\]=(\d+\.?\d*)/g;
         let match;
         const parameterRanges: Record<string, [number, number]> = {
@@ -129,16 +133,21 @@ export class OceanAI {
         while ((match = paramRegex.exec(response)) !== null) {
             const [_, param, valueStr] = match;
             const value = parseFloat(valueStr);
+            console.log('Found parameter change:', param, value);
             
             if (parameterRanges[param]) {
                 const [min, max] = parameterRanges[param];
                 const clampedValue = Math.max(min, Math.min(max, value));
+                console.log('Clamped value:', param, clampedValue, `(original: ${value})`);
                 changes.push([param, clampedValue]);
+            } else {
+                console.warn('Unknown parameter:', param);
             }
         }
-
         // Apply all changes at once to avoid multiple updates
+        console.log('Applying changes:', changes);
         changes.forEach(([param, value]) => {
+            console.log('Updating parameter:', param, value);
             this._gui.updateParameter(param, value);
         });
 
