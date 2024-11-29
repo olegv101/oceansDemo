@@ -6,7 +6,9 @@
     "scripts": {
         "start": "webpack serve",
         "build": "webpack --mode=production",
-        "lint": "eslint src/**/*,{ts,tsx}"
+        "lint": "eslint src/**/*,{ts,tsx}",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d dist"
     },
     "repository": {
         "type": "git",
@@ -19,12 +21,12 @@
         "webgpu"
     ],
     "author": {
-        "name": "Popov",
-        "email": "popov@github.com",
+        "name": "Oleg",
+        "email": "olegviatkin@berkeley.edu",
         "url": "http://www.evpopov.com/"
     },
     "license": "MIT",
-    "homepage": "https://github.com/Popov72/OceanDemo",
+    "homepage": "https://olegv101.github.io/oceansDemo",
     "dependencies": {
         "@babylonjs/core": "^5.28.0",
         "@babylonjs/gui": "^5.28.0",
@@ -41,6 +43,7 @@
         "eslint": "^8.8.0",
         "file-loader": "^6.2.0",
         "follow-redirects": ">=1.14.7",
+        "gh-pages": "^6.2.0",
         "html-webpack-plugin": "^5.5.0",
         "raw-loader": "^4.0.2",
         "rimraf": "3.0.2",

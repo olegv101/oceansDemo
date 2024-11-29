@@ -1,0 +1,327 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><title>Ocean's 82 Wave Demo</title><meta name="Oceans 82 Bonus" content="A clone of a repo with additional changes, specific to the Oceans 82 class"/><meta name="author" content="Oleg"/><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"><style>html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        #radioPlayer {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .radio-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .radio-controls button {
+            background: #4c75af;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .radio-controls button:hover {
+            background: #4565a0;
+        }
+
+        #songTitle {
+            margin: 0;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .song-thumbnail {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .song-info {
+            flex: 1;
+        }
+
+        .play-icon,
+        .pause-icon {
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .play-icon {
+            display: none;
+        }
+
+        .pause-icon {
+            display: block;
+        }
+
+        #radioPlayer {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-controls button i {
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .progress-bar {
+            margin: 10px 0;
+        }
+
+        #seekSlider {
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        #welcomeText {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .welcome-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .welcome-controls {
+            display: flex;
+            gap: 5px;
+        }
+
+        .welcome-controls button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 14px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .welcome-controls button:hover {
+            opacity: 1;
+        }
+
+        #welcomeText.minimized #welcomeDescription {
+            display: none;
+        }
+
+        #welcomeText.minimized {
+            padding: 10px 20px;
+        }
+
+        #aiChat {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 350px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            color: white;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-container {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chatMessages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background: #4CAF50;
+            margin-left: auto;
+        }
+
+        .bot-message {
+            background: rgba(255, 255, 255, 0.1);
+            margin-right: auto;
+        }
+
+        .chat-input-container {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        #chatInput {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 10px;
+            border-radius: 20px;
+            color: white;
+        }
+
+        #sendChat {
+            background: #4c7caf;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: white;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .footer a {
+            color: #5a63d0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #4559a0;
+        }
+
+        .chat-info {
+            position: fixed;
+            bottom: 500px;
+            left: 20px;
+            width: 350px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            color: #ccc;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            font-size: 13px;
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .chat-info .close-button {
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .chat-info .close-button:hover {
+            opacity: 1;
+        }
+
+        .chat-info.hidden {
+            display: none;
+        }
+
+        .chat-info strong {
+            color: white;
+            font-weight: 600;
+        }
+
+        .chat-info ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .chat-info li {
+            margin-bottom: 4px;
+        }</style><script defer="defer" src="ocean.e2d347004f572c3b104c.js"></script></head><body><canvas id="renderCanvas" touch-action="none"></canvas><div id="radioPlayer"><img id="songThumbnail" class="song-thumbnail" alt="Song thumbnail"><div class="song-info"><h3 id="songTitle">Ocean Radio</h3><div class="progress-bar"><input type="range" id="seekSlider" value="0" step="0.1"><div class="time-display"><span id="currentTime">0:00</span> <span id="duration">0:00</span></div></div><div class="radio-controls"><button id="playPauseBtn"><i class="fas fa-play play-icon"></i> <i class="fas fa-pause pause-icon hidden"></i></button> <button id="skipBtn"><i class="fas fa-forward"></i></button></div></div></div><div id="welcomeText"><div class="welcome-header"><h1>Welcome to Oleg's Intent-Based Wave Generator</h1><div class="welcome-controls"><button id="minimizeWelcome"><i class="fas fa-minus"></i></button> <button id="closeWelcome"><i class="fas fa-times"></i></button></div></div><p id="welcomeDescription">Play around with the controls on the right while listening to the radio on the top left and enjoy yourself while you learn more about how different aspects of the wave affect how it looks in the ocean. Use F8 to show/hide the GUI (after you click anywhere in the rendering area to give focus to the canvas) and WASD to move.</p></div><div class="chat-info"><div class="chat-info-header"><strong>Instructions:</strong> <button class="close-button" id="closeInstructions"><i class="fas fa-times"></i></button></div><ul><li>Use the controls on the right to adjust the wave parameters.</li><li>Use the radio on the top left to listen to the wave.</li><li>Use F8 to show/hide the GUI (after you click anywhere in the rendering area to give focus to the canvas) and WASD to move.</li></ul></div><div id="aiChat"><div class="chat-header"><h3>Ocean Wave Assistant</h3><button id="toggleChat"><i class="fas fa-chevron-down"></i></button></div><div class="chat-container"><div id="chatMessages"></div><div class="chat-input-container"><input id="chatInput" placeholder="Ask about waves or request changes..."> <button id="sendChat"><i class="fas fa-paper-plane"></i></button></div></div></div><div class="footer">Created by <a href="https://www.linkedin.com/in/oleg-viatkin" target="_blank">Oleg Viatkin</a></div><script>document.addEventListener('DOMContentLoaded', function() {
+            const closeBtn = document.getElementById('closeInstructions');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    const chatInfo = document.querySelector('.chat-info');
+                    if (chatInfo) {
+                        chatInfo.classList.add('hidden');
+                    }
+                });
+            }
+        });</script></body></html>
