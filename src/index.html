@@ -118,6 +118,59 @@
                 font-size: 12px;
                 color: #ccc;
             }
+
+            #welcomeText {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.7);
+                padding: 20px;
+                border-radius: 10px;
+                color: white;
+                z-index: 1000;
+                backdrop-filter: blur(5px);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                max-width: 600px;
+                text-align: center;
+                transition: all 0.3s ease;
+            }
+
+            .welcome-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+            .welcome-controls {
+                display: flex;
+                gap: 5px;
+            }
+
+            .welcome-controls button {
+                background: none;
+                border: none;
+                color: white;
+                cursor: pointer;
+                padding: 5px;
+                font-size: 14px;
+                opacity: 0.7;
+                transition: opacity 0.3s;
+            }
+
+            .welcome-controls button:hover {
+                opacity: 1;
+            }
+
+            #welcomeText.minimized #welcomeDescription {
+                display: none;
+            }
+
+            #welcomeText.minimized {
+                padding: 10px 20px;
+            }
+
         </style>
     </head>
 
@@ -144,6 +197,17 @@
                     </button>
                 </div>
             </div>
+        </div>
+        <div id="welcomeText">
+            <div class="welcome-header">
+                <h1>Welcome to Oceans 82 Wave Generator</h1>
+                <div class="welcome-controls">
+                    <button id="minimizeWelcome"><i class="fas fa-minus"></i></button>
+                    <button id="closeWelcome"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <p id="welcomeDescription">Play around with the controls on the right while listening to the radio on the top left and enjoy yourself while you learn more about how different aspects of the wave affect how it looks in the ocean. Use F8 to show/hide the GUI (after you click anywhere in the rendering area to give focus to the canvas) and WASD to move. 
+            </p>
         </div>
     </body>
 </html>

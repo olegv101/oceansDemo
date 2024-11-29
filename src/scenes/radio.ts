@@ -47,6 +47,19 @@ export class RadioPlayer {
 
         this.initializeEventListeners();
         this.loadCurrentSong();
+
+        // Welcome message controls
+        const welcomeText = document.getElementById('welcomeText') as HTMLDivElement;
+        const minimizeBtn = document.getElementById('minimizeWelcome') as HTMLButtonElement;
+        const closeBtn = document.getElementById('closeWelcome') as HTMLButtonElement;
+
+        minimizeBtn.addEventListener('click', () => {
+            welcomeText.classList.toggle('minimized');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            welcomeText.style.display = 'none';
+        });
     }
 
     private initializeEventListeners(): void {
