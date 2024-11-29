@@ -60,14 +60,26 @@ export class OceanGUI {
     public updateParameter(name: string, value: any): void {
         console.log('OceanGUI.updateParameter called:', name, value);
         
+        // First update the underlying parameter
         this._paramChanged(name, value);
         
-        const control = this._gui.controllers.find((c: any) => c.property === name);
+        // For the GUI control, we need to find the matching controller
+        // Try both the full name and the shortened name
+        let control = this._gui.controllers.find((c: any) => c.property === name);
+        
+        if (!control) {
+            // If not found, try removing the prefix for waves parameters
+            const shortName = name.includes('_') ? name.split('_').slice(-1)[0] : name;
+            control = this._gui.controllers.find((c: any) => c.property === shortName);
+        }
+
         if (control) {
-            console.log('Found GUI control for:', name);
+            console.log('Found GUI control for:', name, 'using property:', control.property);
+            // Update the control's value and trigger a refresh
             control.setValue(value);
+            control.updateDisplay();
         } else {
-            console.warn('No GUI control found for:', name);
+            console.warn('No GUI control found for:', name, 'or shortened version');
         }
     }
 
