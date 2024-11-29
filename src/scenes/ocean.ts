@@ -19,6 +19,7 @@ import { SkyBox } from "./skyBox";
 import { RTTDebug } from "./tools/RTTDebug";
 import { WavesGenerator } from "./wavesGenerator";
 import { WavesSettings } from "./wavesSettings";
+import { OceanAI } from "../services/oceanAI";
 
 
 
@@ -197,6 +198,9 @@ export class Ocean implements CreateSceneClass {
             this._buoyancy.setWaterHeightMap(this._wavesGenerator!.waterHeightMap, this._wavesGenerator!.waterHeightMapScale);
             this._buoyancy.update();
         });
+
+        // Initialize the AI chat assistant
+        new OceanAI(this._gui, process.env.OPENAI_API_KEY!);
 
         return new Promise((resolve) => {
             scene.executeWhenReady(() => resolve(scene));
