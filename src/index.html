@@ -2,12 +2,13 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Popov's Paradise</title>
+        <title>Ocean's 82 Wave Demo</title>
         <meta
-            name="description"
-            content="A sample project based on Babylon.js, written in typescript, built with webpack"
+            name="Oceans 82 Bonus"
+            content="A clone of a repo with additional changes, specific to the Oceans 82 class"
         />
-        <meta name="author" content="Captain Popov" />
+        <meta name="author" content="Oleg" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <style>
             html,
             body {
@@ -23,10 +24,126 @@
                 height: 100%;
                 touch-action: none;
             }
+
+            #radioPlayer {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                background: rgba(0, 0, 0, 0.7);
+                padding: 15px;
+                border-radius: 10px;
+                color: white;
+                z-index: 1000;
+                backdrop-filter: blur(5px);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            }
+
+            .radio-controls {
+                display: flex;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .radio-controls button {
+                background: #4CAF50;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 5px;
+                color: white;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+
+            .radio-controls button:hover {
+                background: #45a049;
+            }
+
+            #songTitle {
+                margin: 0;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+            .song-thumbnail {
+                width: 60px;
+                height: 60px;
+                border-radius: 8px;
+                object-fit: cover;
+                margin-right: 10px;
+            }
+
+            .song-info {
+                flex: 1;
+            }
+
+            .play-icon,
+            .pause-icon {
+                font-size: 16px;
+                cursor: pointer;
+            }
+
+            .play-icon {
+                display: none;
+            }
+
+            .pause-icon {
+                display: block;
+            }
+
+            #radioPlayer {
+                display: flex;
+                align-items: center;
+            }
+
+            .radio-controls button i {
+                font-size: 14px;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            .progress-bar {
+                margin: 10px 0;
+            }
+
+            #seekSlider {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            .time-display {
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                color: #ccc;
+            }
         </style>
     </head>
 
     <body>
         <canvas id="renderCanvas" touch-action="none"></canvas>
+        <div id="radioPlayer">
+            <img id="songThumbnail" class="song-thumbnail" alt="Song thumbnail">
+            <div class="song-info">
+                <h3 id="songTitle">Ocean Radio</h3>
+                <div class="progress-bar">
+                    <input type="range" id="seekSlider" value="0" step="0.1">
+                    <div class="time-display">
+                        <span id="currentTime">0:00</span>
+                        <span id="duration">0:00</span>
+                    </div>
+                </div>
+                <div class="radio-controls">
+                    <button id="playPauseBtn">
+                        <i class="fas fa-play play-icon"></i>
+                        <i class="fas fa-pause pause-icon hidden"></i>
+                    </button>
+                    <button id="skipBtn">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

@@ -3,6 +3,7 @@ var os = require("os");
 var fs = require("fs");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 var { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
+var CopyWebpackPlugin = require("copy-webpack-plugin");
 
 var __DEV__ = process.argv.includes("serve");
 
@@ -71,6 +72,11 @@ module.exports = {
         new HtmlWebpackPlugin({
             inject: true,
             template: path.join(__dirname, "src/index.html"),
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: "public/assets", to: "assets" }
+            ],
         }),
     ],
     devServer: {

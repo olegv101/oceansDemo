@@ -2,6 +2,7 @@ import * as BABYLON from "@babylonjs/core";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { WebGPUEngine } from "@babylonjs/core/Engines/webgpuEngine";
 import { getSceneModuleWithName } from "./createScene";
+import { RadioPlayer } from './scenes/radio';
 
 //import "@babylonjs/inspector";
 
@@ -29,8 +30,6 @@ export const babylonInit = async (): Promise<void>  => {
             deviceDescriptor: {
                 requiredFeatures: [
                     "depth-clip-control",
-                    "depth24unorm-stencil8",
-                    "depth32float-stencil8",
                     "texture-compression-bc",
                     "texture-compression-etc2",
                     "texture-compression-astc",
@@ -59,6 +58,8 @@ export const babylonInit = async (): Promise<void>  => {
     window.addEventListener("resize", function () {
         engine.resize();
     });
+
+    new RadioPlayer();
 }
 
 babylonInit().then(() => {
