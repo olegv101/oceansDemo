@@ -43,7 +43,7 @@
         }
 
         .radio-controls button {
-            background: #4CAF50;
+            background: #4c75af;
             border: none;
             padding: 5px 10px;
             border-radius: 5px;
@@ -53,7 +53,7 @@
         }
 
         .radio-controls button:hover {
-            background: #45a049;
+            background: #4565a0;
         }
 
         #songTitle {
@@ -235,13 +235,95 @@
         }
 
         #sendChat {
-            background: #4CAF50;
+            background: #4c7caf;
             border: none;
             width: 40px;
             height: 40px;
             border-radius: 50%;
             color: white;
             cursor: pointer;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: white;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .footer a {
+            color: #5a63d0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #4559a0;
+        }
+
+        .chat-info {
+            position: fixed;
+            bottom: 500px;
+            left: 20px;
+            width: 350px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            color: #ccc;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            font-size: 13px;
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .chat-info .close-button {
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .chat-info .close-button:hover {
+            opacity: 1;
+        }
+
+        .chat-info.hidden {
+            display: none;
+        }
+
+        .chat-info strong {
+            color: white;
+            font-weight: 600;
+        }
+
+        .chat-info ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .chat-info li {
+            margin-bottom: 4px;
         }
     </style>
 </head>
@@ -272,7 +354,7 @@
     </div>
     <div id="welcomeText">
         <div class="welcome-header">
-            <h1>Welcome to Oceans 82 Wave Generator</h1>
+            <h1>Welcome to Oleg's Intent-Based Wave Generator</h1>
             <div class="welcome-controls">
                 <button id="minimizeWelcome"><i class="fas fa-minus"></i></button>
                 <button id="closeWelcome"><i class="fas fa-times"></i></button>
@@ -283,6 +365,19 @@
             the ocean. Use F8 to show/hide the GUI (after you click anywhere in the rendering area to give focus to the
             canvas) and WASD to move.
         </p>
+    </div>
+    <div class="chat-info">
+        <div class="chat-info-header">
+            <strong>Instructions:</strong>
+            <button class="close-button" id="closeInstructions">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul>
+            <li>Use the controls on the right to adjust the wave parameters.</li>
+            <li>Use the radio on the top left to listen to the wave.</li>
+            <li>Use F8 to show/hide the GUI (after you click anywhere in the rendering area to give focus to the canvas) and WASD to move.</li>
+        </ul>
     </div>
     <div id="aiChat">
         <div class="chat-header">
@@ -299,6 +394,22 @@
             </div>
         </div>
     </div>
+    <div class="footer">
+        Created by <a href="https://www.linkedin.com/in/oleg-viatkin" target="_blank">Oleg Viatkin</a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const closeBtn = document.getElementById('closeInstructions');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    const chatInfo = document.querySelector('.chat-info');
+                    if (chatInfo) {
+                        chatInfo.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

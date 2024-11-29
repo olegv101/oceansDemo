@@ -1,8 +1,6 @@
 # Ocean demo in WebGPU
 
-This is a port to [Babylon.js](https://www.babylonjs.com/) of the great project [FFT-Ocean](https://github.com/gasgiant/FFT-Ocean): all credits to Ivan Pensionerov (https://github.com/gasgiant)!
-
-Link to the demo: https://popov72.github.io/OceanDemo/dist/index.html
+Link to Original demo: https://popov72.github.io/OceanDemo/dist/index.html
 
 You can also browse this demo in the Babylon.js Playground: https://playground.babylonjs.com/#YX6IB8#758
 
@@ -24,3 +22,4 @@ To run the demo on your local computer
 1. run `npm start`
 1. A new window should open in your default browser. if it doesn't, open http://localhost:8080
 1. You can also build the dist files by doing `npm run build`
+1. MAKE SURE TO ADD A .env FILE AND ADD YOUR OPENAI API KEY!!!!!
