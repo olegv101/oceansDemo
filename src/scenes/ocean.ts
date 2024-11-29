@@ -200,7 +200,7 @@ export class Ocean implements CreateSceneClass {
         });
 
         // Initialize the AI chat assistant
-        new OceanAI(this._gui, process.env.OPENAI_API_KEY!);
+        new OceanAI(this._gui, process.env.OPENAI_API_KEY || '');
 
         return new Promise((resolve) => {
             scene.executeWhenReady(() => resolve(scene));

@@ -58,8 +58,36 @@ export class OceanAI {
                 messages: [{
                     role: "system",
                     content: `You are an ocean wave simulation assistant. You can explain wave phenomena and control a wave simulator.
-                    Available wave parameters include: wind speed (0-100), fetch (100-1000000), wave scale (0-1), wind direction (-100 to 100).
-                    When users request specific wave conditions, analyze their request and respond with both an explanation and the appropriate parameter changes.`
+                    Available wave parameters include:
+                    - waves_g: Gravity (0.01-30)
+                    - waves_depth: Ocean depth (0.001-3)
+                    - waves_lambda: Lambda (0-1)
+                    
+                    Local wave parameters:
+                    - waves_local_scale: Scale (0-1)
+                    - waves_local_windSpeed: Wind speed (0.001-100)
+                    - waves_local_windDirection: Wind direction (-100 to 100)
+                    - waves_local_fetch: Fetch (100-1000000)
+                    - waves_local_spreadBlend: Spread blend (0-1)
+                    - waves_local_swell: Swell (0-1)
+                    - waves_local_peakEnhancement: Peak enhancement (0.01-100)
+                    - waves_local_shortWavesFade: Short waves fade (0.001-1)
+
+                    Swell parameters:
+                    - waves_swell_scale: Scale (0-1)
+                    - waves_swell_windSpeed: Wind speed (0.001-100)
+                    - waves_swell_windDirection: Wind direction (-100 to 100)
+                    - waves_swell_fetch: Fetch (100-1000000)
+                    - waves_swell_spreadBlend: Spread blend (0-1)
+                    - waves_swell_swell: Swell (0-1)
+                    - waves_swell_peakEnhancement: Peak enhancement (0.01-100)
+                    - waves_swell_shortWavesFade: Short waves fade (0.001-1)
+
+                    When responding to wave condition requests, use SET_PARAM commands to adjust parameters. For example:
+                    SET_PARAM[waves_swell_windSpeed]=80
+                    SET_PARAM[waves_local_fetch]=500000
+
+                    Always explain the changes you're making and why they create the requested wave conditions.`
                 }, {
                     role: "user",
                     content: message
@@ -73,14 +101,46 @@ export class OceanAI {
     }
 
     private _processAIResponse(response: string): string {
-        // Look for parameter change commands in the response
         const paramRegex = /SET_PARAM\[(.*?)\]=(\d+\.?\d*)/g;
         let match;
+        const parameterRanges: Record<string, [number, number]> = {
+            'waves_g': [0.01, 30],
+            'waves_depth': [0.001, 3],
+            'waves_lambda': [0, 1],
+            'waves_local_scale': [0, 1],
+            'waves_local_windSpeed': [0.001, 100],
+            'waves_local_windDirection': [-100, 100],
+            'waves_local_fetch': [100, 1000000],
+            'waves_local_spreadBlend': [0, 1],
+            'waves_local_swell': [0, 1],
+            'waves_local_peakEnhancement': [0.01, 100],
+            'waves_local_shortWavesFade': [0.001, 1],
+            'waves_swell_scale': [0, 1],
+            'waves_swell_windSpeed': [0.001, 100],
+            'waves_swell_windDirection': [-100, 100],
+            'waves_swell_fetch': [100, 1000000],
+            'waves_swell_spreadBlend': [0, 1],
+            'waves_swell_swell': [0, 1],
+            'waves_swell_peakEnhancement': [0.01, 100],
+            'waves_swell_shortWavesFade': [0.001, 1]
+        };
 
+        const changes: Array<[string, number]> = [];
         while ((match = paramRegex.exec(response)) !== null) {
-            const [_, param, value] = match;
-            this._gui.updateParameter(param, parseFloat(value));
+            const [_, param, valueStr] = match;
+            const value = parseFloat(valueStr);
+            
+            if (parameterRanges[param]) {
+                const [min, max] = parameterRanges[param];
+                const clampedValue = Math.max(min, Math.min(max, value));
+                changes.push([param, clampedValue]);
+            }
         }
+
+        // Apply all changes at once to avoid multiple updates
+        changes.forEach(([param, value]) => {
+            this._gui.updateParameter(param, value);
+        });
 
         // Remove the parameter commands from the response
         return response.replace(paramRegex, '');
@@ -128,5 +188,19 @@ export class OceanAI {
                 toggleBtn.querySelector('i')?.classList.toggle('fa-chevron-down');
             }
         });
+    }
+
+    private _applyPreset(presetName: string): boolean {
+        const preset = this._presets.find(p => 
+            p.name.toLowerCase() === presetName.toLowerCase()
+        );
+
+        if (preset) {
+            Object.entries(preset.settings).forEach(([param, value]) => {
+                this._gui.updateParameter(param, value);
+            });
+            return true;
+        }
+        return false;
     }
 }

@@ -57,6 +57,15 @@ export class OceanGUI {
         this._scene.onKeyboardObservable.remove(this._onKeyObserver);
     }
 
+    public updateParameter(name: string, value: any): void {
+        this._paramChanged(name, value);
+        
+        const control = this._gui.controllers.find((c: any) => c.property === name);
+        if (control) {
+            control.setValue(value);
+        }
+    }
+
     private _setupKeyboard(): void {
         this._onKeyObserver = this._scene.onKeyboardObservable.add((kbInfo) => {
             switch (kbInfo.type) {

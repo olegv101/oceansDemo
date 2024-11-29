@@ -4,6 +4,7 @@ var fs = require("fs");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 var { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
 var CopyWebpackPlugin = require("copy-webpack-plugin");
+const Dotenv = require('dotenv-webpack');
 
 var __DEV__ = process.argv.includes("serve");
 
@@ -78,6 +79,9 @@ module.exports = {
                 { from: "public/assets", to: "assets" }
             ],
         }),
+        new Dotenv({
+            systemvars: true,
+        })
     ],
     devServer: {
         static: {
