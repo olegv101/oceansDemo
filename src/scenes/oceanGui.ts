@@ -63,23 +63,35 @@ export class OceanGUI {
         // First update the underlying parameter
         this._paramChanged(name, value);
         
-        // For the GUI control, we need to find the matching controller
-        // Try both the full name and the shortened name
-        let control = this._gui.controllers.find((c: any) => c.property === name);
-        
-        if (!control) {
-            // If not found, try removing the prefix for waves parameters
-            const shortName = name.includes('_') ? name.split('_').slice(-1)[0] : name;
-            control = this._gui.controllers.find((c: any) => c.property === shortName);
-        }
-
-        if (control) {
-            console.log('Found GUI control for:', name, 'using property:', control.property);
-            // Update the control's value and trigger a refresh
-            control.setValue(value);
-            control.updateDisplay();
+        // Find the correct folder and control
+        if (name.startsWith('waves_')) {
+            const parts = name.split('_');
+            let folder = this._gui.folders.find((f: any) => f._title === "Waves Generator");
+            
+            // If it's a local or swell parameter, we need to go one level deeper
+            if (parts[1] === 'local' || parts[1] === 'swell') {
+                folder = folder.folders.find((f: any) => f._title === parts[1].charAt(0).toUpperCase() + parts[1].slice(1));
+            }
+            
+            if (folder) {
+                const control = folder.controllers.find((c: any) => c.property === name);
+                if (control) {
+                    console.log('Found GUI control in folder:', folder._title, 'for:', name);
+                    control.setValue(value);
+                    control.updateDisplay();
+                } else {
+                    console.warn('No GUI control found in folder for:', name);
+                }
+            } else {
+                console.warn('No folder found for:', name);
+            }
         } else {
-            console.warn('No GUI control found for:', name, 'or shortened version');
+            // For non-waves parameters (if any)
+            const control = this._gui.controllers.find((c: any) => c.property === name);
+            if (control) {
+                control.setValue(value);
+                control.updateDisplay();
+            }
         }
     }
 
